@@ -1,13 +1,13 @@
 COMPILER=clang++
-CPPFLAGS= -std=c++20
-LDFLAGS=
+CPPFLAGS= -std=c++17
+LDFLAGS= -v
 
 APP_NAME=PuzzleConjecture
 EXECUTABLE=bin/$(APP_NAME)
 
 SRC = src
-SOURCES=$(wildcard $(SRC)/*.cpp $(SRC)/**/*.cpp)
-HPPSOURCES = $(wildcard $(SRC)/*.hpp $(SRC)/*/*.hpp)
+SOURCES=$(wildcard $(SRC)/*.cpp)
+HPPSOURCES = $(wildcard $(SRC)/*.hpp)
 OBJECTS=$(SOURCES:.cpp=.o)
 
 $(EXECUTABLE): $(OBJECTS)
@@ -19,7 +19,7 @@ $(EXECUTABLE): $(OBJECTS)
 all: $(EXECUTABLE) makefile
 
 clean:
-	rm -fr $(EXECUTABLE) $(OBJECTS) $(LIBRARY) $(LIBHPP)
+	rm -fr $(EXECUTABLE) $(OBJECTS)
 
 run:
 	./$(EXECUTABLE)
