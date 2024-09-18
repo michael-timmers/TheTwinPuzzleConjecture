@@ -16,10 +16,10 @@ Puzzle::Puzzle(size_t cols, size_t rows)
             if (i == 0 && j == 0) j++;
 
             (*this)(i, j) = Piece(
-                i == 0 || i == rows - 1 ? 0 : -(*this)(i - 1, j).s.jointID,
-                j == 0 || j == cols - 1 ? 0 : -(*this)(i, j - 1).w.jointID,
+                i == 0 ? 0 : -(*this)(i - 1, j).s.jointID,
+                j == cols - 1 ? 0 : ids++,
                 i == rows - 1 ? 0 : ids++,
-                j == 0 ? 0 : ids++);
+                j == 0 ? 0 : -(*this)(i, j - 1).e.jointID);
 
             std::cout << i << "," << j << ":" << (*this)(i, j).str() << std::endl;
         }
