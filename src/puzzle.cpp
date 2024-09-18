@@ -4,7 +4,7 @@
 
 #include "puzzle.hpp"
 
-Puzzle::Puzzle(size_t rows, size_t cols)
+Puzzle::Puzzle(size_t cols, size_t rows)
     : rows(rows),
       cols(cols),
       pieces(rows * cols) {
@@ -39,9 +39,9 @@ const Piece& Puzzle::operator()(size_t row, size_t col) const {
 }
 
 void Puzzle::display() {
-    for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j < WIDTH; j++)
-            std::cout << pieces[i][j].str() << " ";
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++)
+            std::cout << (*this)(i, j).str() << " ";
         std::cout << std::endl;
     }
 }
