@@ -1,24 +1,19 @@
 #pragma once
 
 #include <vector>
+#include <cassert>
 
 #include "piece.hpp"
 
 class Puzzle {
-    const int WIDTH, HEIGHT;
-    std::vector<std::vector<Piece> > pieces;
+    size_t rows, cols;
+    std::vector<Piece> pieces;
 
    public:
-    Puzzle(const int WIDTH, const int HEIGHT);
+    Puzzle(size_t rows, size_t cols);
+
+    Piece& operator()(size_t row, size_t col);
+    const Piece& operator()(size_t row, size_t col) const;
 
     void display();
-
-   private:
-    inline int lin2x(int i) const {
-        return i % WIDTH;
-    }
-
-    inline int lin2y(int i) const {
-        return i / HEIGHT;
-    }
 };
