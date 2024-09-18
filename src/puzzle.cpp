@@ -8,19 +8,16 @@ Puzzle::Puzzle(int WIDTH, int HEIGHT)
     : WIDTH(WIDTH),
       HEIGHT(HEIGHT),
       pieces(HEIGHT) {
-    int ids = 3;
+    // need to seed puzle to generate joint ids
+    pieces[0].push_back(Piece(0, 1, 2, 0));
+    int ids = 3;  // since some IDDs have already been 'seeded'
     for (int i = 0; i < HEIGHT; i++) {
-        auto p = pieces[i].begin();
-        for (int j = 0; j < WIDTH; j++, p++) {
-            if (p->n.isEdge() && p->w.isEdge()) {
-                pieces[i].push_back(Piece(0, 1, 2, 0));
-            } else {
-                pieces[i].push_back(Piece(
-                    p.n.isEdge() || p.s.isEdge() ? 0 : -pieces[i - 1][j].s.jointID,
-                    p.w.isEdge() || p.e.isEdge() ? 0 : -pieces[i][j - 1].w.jointID,
-                    p.s.isEdge() ? 0 : ids++,
-                    p.w.isEdge() ? 0 : ids++));
-            }
+        for (int j = 0; pieces[i].size() < WIDTH; j++) {
+            pieces[i].push_back(Piece(
+                i == 0 || i == HEIGHT - 1 ? 0 : -pieces[i - 1][j].s.jointID,
+                j == 0 || j == WIDTH - 1 ? 0 : -pieces[i][j - 1].w.jointID,
+                i == HEIGHT - 1 ? 0 : ids++,
+                j == 0 ? 0 : ids++));
             std::cout << i << "," << j << ":" << pieces[i][j].str() << std::endl;
         }
     }
