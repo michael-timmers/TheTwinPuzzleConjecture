@@ -14,7 +14,7 @@ class Puzzle {
     const int duplicationsAllowed;
     std::vector<Piece> pieces;
 
-    Puzzle(size_t cols, size_t rows, int duplicationsAllowed);
+    Puzzle(size_t cols, size_t rows, int duplicationsAllowed, bool generatePieces = true);
 
     inline Piece& operator()(size_t row, size_t col) {
         assert(row < rows);

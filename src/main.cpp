@@ -6,7 +6,7 @@
 int main() {
     std::cout << "The Twin Puzzle Conjecture\n";
 
-    Puzzle puzzle(3, 3, 2);
+    Puzzle puzzle(2, 2, 2);
     puzzle.display();
 
     PuzzleSolver solver(puzzle);

@@ -2,16 +2,18 @@
 
 #include "puzzle.hpp"
 
-Puzzle::Puzzle(size_t cols, size_t rows, int duplicationsAllowed)
+Puzzle::Puzzle(size_t cols, size_t rows, int duplicationsAllowed, bool generatePieces)
     : rows(rows),
       cols(cols),
       duplicationsAllowed(duplicationsAllowed),
       pieces(rows * cols),
       jointCounts((rows * (cols - 1) + cols * (rows - 1)) / duplicationsAllowed) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            generateNextPiece(i, j);
-            // std::cout << i << "," << j << ":" << (*this)(i, j).str() << std::endl;
+    if (generatePieces) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                generateNextPiece(i, j);
+                // std::cout << i << "," << j << ":" << (*this)(i, j).str() << std::endl;
+            }
         }
     }
 }
@@ -24,7 +26,7 @@ bool Puzzle::fits(const Piece& p, size_t row, size_t col) {
 }
 
 void Puzzle::place(const Piece& p, size_t row, size_t col) {
-    (*this)(row, col) = 0;
+    (*this)(row, col) = p;
 }
 
 void Puzzle::display() {

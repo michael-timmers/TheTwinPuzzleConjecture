@@ -3,7 +3,7 @@
 #include "puzzlesolver.hpp"
 
 PuzzleSolver::PuzzleSolver(Puzzle filledPuzzle)
-    : initBoard(filledPuzzle.cols, filledPuzzle.rows, filledPuzzle.duplicationsAllowed),
+    : initBoard(filledPuzzle.cols, filledPuzzle.rows, filledPuzzle.duplicationsAllowed, false),
       allPieces(filledPuzzle.pieces) {
 }
 
@@ -27,6 +27,7 @@ void PuzzleSolver::tryPlacingPieces(Puzzle board, std::vector<Piece> unplaced) {
                     unplaced.erase(unplaced.begin() + k);
                     tryPlacingPieces(board, unplaced);
                 }
+                std::cout << "not placing " << k << "\n";
             }
         }
     }
@@ -38,6 +39,7 @@ bool PuzzleSolver::tryPlacingPiece(Puzzle board, size_t row, size_t col, Piece p
         for (int i = 0; i < 4; i++) {
             if (board.fits(piece, row, col)) {
                 board.place(piece, row, col);
+                std::cout << "placing at " << row << col << " : " << piece.str() << "\n";
                 return true;
             }
         }
