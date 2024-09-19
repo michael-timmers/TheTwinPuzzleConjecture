@@ -8,19 +8,10 @@ Puzzle::Puzzle(size_t cols, size_t rows, int duplicationsAllowed)
       duplicationsAllowed(duplicationsAllowed),
       pieces(rows * cols),
       jointCounts((rows * (cols - 1) + cols * (rows - 1)) / duplicationsAllowed) {
-    // need to seed puzle to generate joint ids
-    (*this)(0, 0) = Piece(0, getRandID(), getRandID(), 0);
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            if (i == 0 && j == 0) j++;
-
-            (*this)(i, j) = Piece(
-                i == 0 ? 0 : -(*this)(i - 1, j).s.jointID,
-                j == cols - 1 ? 0 : getRandID(),
-                i == rows - 1 ? 0 : getRandID(),
-                j == 0 ? 0 : -(*this)(i, j - 1).e.jointID);
-
-            std::cout << i << "," << j << ":" << (*this)(i, j).str() << std::endl;
+            (*this)(i, j) = generateNextPiece(i, j);
+            // std::cout << i << "," << j << ":" << (*this)(i, j).str() << std::endl;
         }
     }
 }
