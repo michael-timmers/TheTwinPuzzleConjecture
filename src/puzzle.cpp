@@ -16,6 +16,17 @@ Puzzle::Puzzle(size_t cols, size_t rows, int duplicationsAllowed)
     }
 }
 
+bool Puzzle::fits(const Piece& p, size_t row, size_t col) {
+    return (row == 0 || (*this)(row - 1, col).s.fits(p.n)) &&
+           (col == cols - 1 || (*this)(row, col + 1).w.fits(p.e)) &&
+           (row == rows - 1 || (*this)(row + 1, col).n.fits(p.s)) &&
+           (col == 0 || (*this)(row, col - 1).e.fits(p.w));
+}
+
+void Puzzle::place(const Piece& p, size_t row, size_t col) {
+    (*this)(row, col) = 0;
+}
+
 void Puzzle::display() {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++)

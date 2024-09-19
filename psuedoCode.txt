@@ -16,6 +16,7 @@ BEGIN recTryPlacingPieces(board, unplaced)
 		FOR j FROM 0 TO board.cols
 			for k FROM 0 TO unplaced.size()
 				if tryPiece(board, i, j, unplaced[k])
+				REMOVE unplaced[k] FROM unplaced
 					recTryPlacingPieces(board, unplaced)
 				ENDIF
 			ENDFOR
@@ -24,10 +25,11 @@ BEGIN recTryPlacingPieces(board, unplaced)
 	puzleList.add(board)
 END 
 
-BEGIN tryPiece(board, piece)
-	IF !board(i, j).isPlaced
+BEGIN tryPiece(board, row, col, piece)
+	IF !board(row, col).isPlaced
 		FOR rotationAmount FROM 0 TO 3
-			IF board.fits(piece, i, j)
+			IF board.fits(piece, row, col)
+			board(row, col) = piece
 				RETURN true
 			ENDIF
 		ENDFOR

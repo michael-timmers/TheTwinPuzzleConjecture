@@ -15,10 +15,11 @@ class Piece {
         return "[" + n.str() + " " + e.str() + " " + s.str() + " " + w.str() + "]";
     }
 
-    inline void setAll(int n, int e, int s, int w) {
+    inline void setAll(int n, int e, int s, int w, bool isPlaced) {
         this->n.jointID = n;
         this->e.jointID = e;
         this->s.jointID = s;
         this->w.jointID = w;
+        this->isPlaced = isPlaced;
     }
 };

@@ -7,12 +7,13 @@
 #include "piece.hpp"
 
 class Puzzle {
-    size_t rows, cols;
-    const int duplicationsAllowed;
-    std::vector<Piece> pieces;
     std::vector<int> jointCounts;
 
    public:
+    size_t rows, cols;
+    const int duplicationsAllowed;
+    std::vector<Piece> pieces;
+
     Puzzle(size_t cols, size_t rows, int duplicationsAllowed);
 
     inline Piece& operator()(size_t row, size_t col) {
@@ -26,6 +27,9 @@ class Puzzle {
         assert(col < cols);
         return pieces[row * rows + col];
     }
+
+    bool fits(const Piece& p, size_t row, size_t col);
+    void place(const Piece& p, size_t row, size_t col);
 
     void display();
 
