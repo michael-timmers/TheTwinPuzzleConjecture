@@ -12,7 +12,7 @@ class Piece {
     Piece(int n = 0, int e = 0, int s = 0, int w = 0, bool isPlaced = false);
 
     inline std::string str() const {
-        return "[" + n.str() + " " + e.str() + " " + s.str() + " " + w.str() + "]";
+        return "[" + std::to_string(isPlaced) + " " + n.str() + " " + e.str() + " " + s.str() + " " + w.str() + "]";
     }
 
     inline void setAll(int n, int e, int s, int w, bool isPlaced) {
