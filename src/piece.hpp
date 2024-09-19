@@ -7,8 +7,9 @@
 class Piece {
    public:
     Edge n, e, s, w;
+    bool isPlaced;
 
-    Piece(int n = 0, int e = 0, int s = 0, int w = 0);
+    Piece(int n = 0, int e = 0, int s = 0, int w = 0, bool isPlaced = false);
 
     inline std::string str() const {
         return "[" + n.str() + " " + e.str() + " " + s.str() + " " + w.str() + "]";

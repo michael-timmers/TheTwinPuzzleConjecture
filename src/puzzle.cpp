@@ -10,7 +10,7 @@ Puzzle::Puzzle(size_t cols, size_t rows, int duplicationsAllowed)
       jointCounts((rows * (cols - 1) + cols * (rows - 1)) / duplicationsAllowed) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            (*this)(i, j) = generateNextPiece(i, j);
+            generateNextPiece(i, j);
             // std::cout << i << "," << j << ":" << (*this)(i, j).str() << std::endl;
         }
     }
@@ -24,12 +24,13 @@ void Puzzle::display() {
     }
 }
 
-Piece Puzzle::generateNextPiece(int i, int j) {
-    return Piece(
-        i == 0 ? 0 : -(*this)(i - 1, j).s.jointID,
-        j == cols - 1 ? 0 : getRandID(),
-        i == rows - 1 ? 0 : getRandID(),
-        j == 0 ? 0 : -(*this)(i, j - 1).e.jointID);
+void Puzzle::generateNextPiece(int i, int j) {
+    Piece& p = (*this)(i, j);
+    p.n.jointID = (i == 0 ? 0 : -(*this)(i - 1, j).s.jointID);
+    p.e.jointID = (j == cols - 1 ? 0 : getRandID());
+    p.s.jointID = (i == rows - 1 ? 0 : getRandID());
+    p.w.jointID = (j == 0 ? 0 : -(*this)(i, j - 1).e.jointID);
+    p.isPlaced = false;
 }
 
 const int Puzzle::getRandID() {

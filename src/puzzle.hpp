@@ -30,7 +30,7 @@ class Puzzle {
     void display();
 
    private:
-    Piece generateNextPiece(int i, int j);
+    void generateNextPiece(int i, int j);
 
     const int getRandID();
 };

@@ -1,0 +1,36 @@
+INIT puzzleList = NEW LIST
+
+BEGIN FindSolutions
+	INIT puzzle = RANDOM puzzle WITH DUPLICATIONS
+	buildNewPuzzlesFrom(puzzle)
+END
+
+BEGIN buildNewPuzzlesFrom(puzzle)
+	INIT board = NEW PUZZLE WITH puzzle(0, 0) AS FIRST ELEMENT
+	INIT unPlaced = VECTOR OF EVERYTHING IN puzzle BUT FIRST
+	recTryPlacingPieces(board, unplaced)
+END
+
+BEGIN recTryPlacingPieces(board, unplaced)
+	FOR i FROM 0 TO board.rows
+		FOR j FROM 0 TO board.cols
+			for k FROM 0 TO unplaced.size()
+				if tryPiece(board, i, j, unplaced[k])
+					recTryPlacingPieces(board, unplaced)
+				ENDIF
+			ENDFOR
+		ENDFOR
+	ENDFOR
+	puzleList.add(board)
+END 
+
+BEGIN tryPiece(board, piece)
+	IF !board(i, j).isPlaced
+		FOR rotationAmount FROM 0 TO 3
+			IF board.fits(piece, i, j)
+				RETURN true
+			ENDIF
+		ENDFOR
+	ENDIF
+	RETURN false
+END
