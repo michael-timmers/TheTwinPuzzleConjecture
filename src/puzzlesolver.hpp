@@ -12,6 +12,8 @@ class PuzzleSolver {
 
     void findNewPuzzles();
 
+    void displaySolvedPuzzles();
+
    private:
     void tryPlacingPieces(Puzzle board, std::vector<Piece> unplaced);
     bool tryPlacingPiece(Puzzle board, size_t row, size_t col, Piece piece);

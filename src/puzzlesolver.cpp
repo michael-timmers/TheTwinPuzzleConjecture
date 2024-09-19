@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "puzzlesolver.hpp"
 
 PuzzleSolver::PuzzleSolver(Puzzle filledPuzzle)
@@ -7,6 +9,14 @@ PuzzleSolver::PuzzleSolver(Puzzle filledPuzzle)
 
 void PuzzleSolver::findNewPuzzles() {
     tryPlacingPieces(initBoard, allPieces);
+}
+
+void PuzzleSolver::displaySolvedPuzzles() {
+    std::cout << solvedPuzzles.size() << " Solved puzles:\n";
+    for (auto puzzle : solvedPuzzles) {
+        std::cout << "puzzle:\n";
+        puzzle.display();
+    }
 }
 
 void PuzzleSolver::tryPlacingPieces(Puzzle board, std::vector<Piece> unplaced) {
