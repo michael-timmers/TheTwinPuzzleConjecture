@@ -1,5 +1,5 @@
 COMPILER=clang++
-CPPFLAGS= -std=c++17
+CPPFLAGS= -std=c++20
 LDFLAGS= -v
 
 APP_NAME=PuzzleConjecture

@@ -20,7 +20,7 @@ class Edge {
         return std::to_string(jointID);
     }
 
-    inline bool fits(const Edge& other) const {
-        return !isEdge() && !other.isEdge() && jointID == -other.jointID;
+    inline bool matches(const Edge& other) const {
+        return jointID == -other.jointID;
     }
 };

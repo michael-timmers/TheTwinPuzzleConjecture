@@ -19,14 +19,27 @@ Puzzle::Puzzle(size_t cols, size_t rows, int duplicationsAllowed, bool generateP
 }
 
 bool Puzzle::fits(const Piece& p, size_t row, size_t col) {
-    return (row == 0 || (*this)(row - 1, col).s.fits(p.n)) &&
-           (col == cols - 1 || (*this)(row, col + 1).w.fits(p.e)) &&
-           (row == rows - 1 || (*this)(row + 1, col).n.fits(p.s)) &&
-           (col == 0 || (*this)(row, col - 1).e.fits(p.w));
+    // three cases where a edge can 'fit'
+    // 1:is facing the edge of the puzzle [a'] and is a flat edge [b']
+    // 2: is facing a piece [a], is a joint [b] and the other piece is unplaced [c']
+    // 3:is facing a piece [a], the other peice is placed[c] and the joints match [d]
+    // a'b'+abc'+acd
+
+    bool nFits = (row == 0 && p.n.isEdge()) || (row != 0 && !p.n.isEdge() && !p.isPlaced) || (row != 0 && p.isPlaced && (*this)(row - 1, col).s.matches(p.n));
+    bool eFits = (col == cols - 1 && p.e.isEdge()) || (col != cols - 1 && !p.e.isEdge() && !p.isPlaced) || (col != cols - 1 && p.isPlaced && (*this)(row, col + 1).w.matches(p.e));
+    bool sFits = (row == rows - 1 && p.s.isEdge()) || (row != rows - 1 && !p.s.isEdge() && !p.isPlaced) || (row != rows - 1 && p.isPlaced && (*this)(row + 1, col).n.matches(p.s));
+    bool wFits = (col == 0 && p.w.isEdge()) || (col != 0 && !p.w.isEdge() && !p.isPlaced) || (col != 0 && p.isPlaced && (*this)(row, col - 1).e.matches(p.w));
+
+    std::cout << "edge checks: {" << nFits << " " << eFits << " " << sFits << " " << wFits << "}\n";
+    return nFits && eFits && sFits && wFits;
 }
 
 void Puzzle::place(const Piece& p, size_t row, size_t col) {
-    (*this)(row, col) = p;
+    (*this)(row, col).n = p.n;
+    (*this)(row, col).e = p.e;
+    (*this)(row, col).s = p.s;
+    (*this)(row, col).w = p.w;
+    (*this)(row, col).isPlaced = true;
 }
 
 void Puzzle::display() {
