@@ -10,9 +10,8 @@ class Piece {
     bool isPlaced;
 
     Piece(int n = 0, int e = 0, int s = 0, int w = 0, bool isPlaced = false);
-
     inline std::string str() const {
-        return "[" + std::to_string(isPlaced) + " " + n.str() + " " + e.str() + " " + s.str() + " " + w.str() + "]";
+        return "[" + n.str() + " " + e.str() + " " + s.str() + " " + w.str() + "]";
     }
 
     inline bool matches(const Piece& other) const {
@@ -28,9 +27,10 @@ class Piece {
     }
 
     inline void rotate() {
-        n = w;
-        e = n;
-        s = e;
-        w = s;
+        Piece temp = *this;
+        n = temp.w;
+        e = temp.n;
+        s = temp.e;
+        w = temp.s;
     }
 };

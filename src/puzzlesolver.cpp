@@ -1,5 +1,4 @@
 #include <iostream>
-#include <ranges>
 #include <algorithm>
 #include <vector>
 
@@ -12,59 +11,59 @@ PuzzleSolver::PuzzleSolver(Puzzle filledPuzzle)
 
 void PuzzleSolver::findNewPuzzles() {
     std::cout << "Finding sollutions with " << allPieces.size() << "pieces and " << initBoard.cols << " by " << initBoard.rows << " board\n";
-    auto unplacedPieces = std::views::all(allPieces);
 
-    placePieces(initBoard, unplacedPieces);
+    placePieces(initBoard, allPieces);
+    removeDuplicatedPuzzles();
 }
 
 void PuzzleSolver::displaySolvedPuzzles() {
-    std::cout << solvedPuzzles.size() << " Solved puzles:\n";
     for (auto puzzle : solvedPuzzles) {
         std::cout << "puzzle:\n";
         puzzle.display();
     }
+    std::cout << solvedPuzzles.size() << " Solved puzles\n";
 }
 
-void PuzzleSolver::placePieces(Puzzle board, std::ranges::input_range auto unplaced) {
-    // std::cout << "New branch with " << std::ranges::distance(unplaced) << " pieces:\n";
-    displayPieceList(unplaced);
-    int splitCount = 0, k = 0;
+void PuzzleSolver::placePieces(Puzzle board, const std::vector<Piece>& unplaced) {
+    std::cout << "New branch with " << unplaced.size() << " pieces\n";
+    int k = 0;
     for (Piece p : unplaced) {
-        std::cout << "checking " << k << "th piece\n";
+        std::cout << "Picking up " << k << "th piece " << p.str() << "\n";
         for (size_t i = 0; i < board.rows; i++) {
             for (size_t j = 0; j < board.cols; j++) {
-                if (tryPlacingPiece(board, i, j, p)) {
-                    auto newUnplaced = std::views::filter(unplaced, [p](Piece _p) { return !p.matches(_p); });
+                std::cout << "Looking at (" << i << ", " << j << "\n";
+                Puzzle newBoard(board);
+                if (tryPlacingPiece(newBoard, i, j, p)) {
+                    std::vector<Piece> newUnplaced(unplaced);
+                    newUnplaced.erase(newUnplaced.begin() + k);
 
-                    std::cout << "erasing " << k << "th piece with remaining pieces:\n";
-                    displayPieceList(unplaced);
+                    std::cout << "Remaining pieces:" << std::endl;
+                    displayPieceList(newUnplaced);
 
-                    placePieces(board, newUnplaced);
-                    ++splitCount;
-                } else {
+                    if (newUnplaced.size() == 0) {
+                        std::cout << "no more pieces\n";
+                        std::cout << "Adding puzle" << std::endl;
+                        solvedPuzzles.push_back(newBoard);
+                        return;
+                    } else {
+                        placePieces(newBoard, newUnplaced);
+                    }
                 }
             }
         }
         ++k;
     }
-
-    if (splitCount == 1) {
-        std::cout << "Adding puzle\n";
-        solvedPuzzles.push_back(board);
-    } else {
-        std::cout << "not adding with split count=" << splitCount << "\n";
-    }
 }
 
 bool PuzzleSolver::tryPlacingPiece(Puzzle& board, size_t row, size_t col, Piece piece) {
-    std::cout << "try placing at (" << row << "," << col << ") " << piece.str() << " : ";
+    std::cout << "try placing: ";
     if (!board(row, col).isPlaced) {
         std::cout << "available space : ";
         for (int i = 0; i < 4; i++) {
-            std::cout << "rot " << i << ", ";
+            std::cout << "rot " << i << " " << piece.str() << ", ";
             if (board.fits(piece, row, col)) {
                 board.place(piece, row, col);
-                std::cout << "placing at (" << row << "," << col << ") : " << board(row, col).str() << "\n";
+                std::cout << "placing at (" << row << "," << col << ") : " << board(row, col).str() << std::endl;
                 return true;
             }
             piece.rotate();
@@ -76,7 +75,18 @@ bool PuzzleSolver::tryPlacingPiece(Puzzle& board, size_t row, size_t col, Piece 
     return false;
 }
 
-void PuzzleSolver::displayPieceList(std::ranges::input_range auto pieces) {
+void PuzzleSolver::displayPieceList(const std::vector<Piece>& pieces) {
     for (auto p : pieces)
         std::cout << "• " << p.str() << "\n";
+}
+
+void PuzzleSolver::removeDuplicatedPuzzles() {
+    for (auto pIt = solvedPuzzles.begin(); pIt < solvedPuzzles.end(); ++pIt) {
+        for (auto pIt2 = pIt + 1; pIt2 < solvedPuzzles.end();) {
+            if (*pIt == *pIt2) {
+                solvedPuzzles.erase(pIt2);
+            } else
+                ++pIt2;
+        }
+    }
 }

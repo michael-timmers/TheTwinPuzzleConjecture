@@ -25,21 +25,17 @@ bool Puzzle::fits(const Piece& p, size_t row, size_t col) {
     // 3:is facing a piece [a], the other peice is placed[c] and the joints match [d]
     // a'b'+abc'+acd
 
-    bool nFits = (row == 0 && p.n.isEdge()) || (row != 0 && !p.n.isEdge() && !p.isPlaced) || (row != 0 && p.isPlaced && (*this)(row - 1, col).s.matches(p.n));
-    bool eFits = (col == cols - 1 && p.e.isEdge()) || (col != cols - 1 && !p.e.isEdge() && !p.isPlaced) || (col != cols - 1 && p.isPlaced && (*this)(row, col + 1).w.matches(p.e));
-    bool sFits = (row == rows - 1 && p.s.isEdge()) || (row != rows - 1 && !p.s.isEdge() && !p.isPlaced) || (row != rows - 1 && p.isPlaced && (*this)(row + 1, col).n.matches(p.s));
-    bool wFits = (col == 0 && p.w.isEdge()) || (col != 0 && !p.w.isEdge() && !p.isPlaced) || (col != 0 && p.isPlaced && (*this)(row, col - 1).e.matches(p.w));
+    bool nFits = (row == 0 && p.n.isEdge()) || (row != 0 && !p.n.isEdge() && !p.isPlaced) || (row != 0 && p.isPlaced && (*this)(row - 1, col).s.fits(p.n));
+    bool eFits = (col == cols - 1 && p.e.isEdge()) || (col != cols - 1 && !p.e.isEdge() && !p.isPlaced) || (col != cols - 1 && p.isPlaced && (*this)(row, col + 1).w.fits(p.e));
+    bool sFits = (row == rows - 1 && p.s.isEdge()) || (row != rows - 1 && !p.s.isEdge() && !p.isPlaced) || (row != rows - 1 && p.isPlaced && (*this)(row + 1, col).n.fits(p.s));
+    bool wFits = (col == 0 && p.w.isEdge()) || (col != 0 && !p.w.isEdge() && !p.isPlaced) || (col != 0 && p.isPlaced && (*this)(row, col - 1).e.fits(p.w));
 
     std::cout << "edge checks: {" << nFits << " " << eFits << " " << sFits << " " << wFits << "}\n";
     return nFits && eFits && sFits && wFits;
 }
 
 void Puzzle::place(const Piece& p, size_t row, size_t col) {
-    (*this)(row, col).n = p.n;
-    (*this)(row, col).e = p.e;
-    (*this)(row, col).s = p.s;
-    (*this)(row, col).w = p.w;
-    (*this)(row, col).isPlaced = true;
+    (*this)(row, col).setAll(p.n.jointID, p.e.jointID, p.s.jointID, p.w.jointID, true);
 }
 
 void Puzzle::display() {
@@ -51,12 +47,11 @@ void Puzzle::display() {
 }
 
 void Puzzle::generateNextPiece(int i, int j) {
-    Piece& p = (*this)(i, j);
-    p.n.jointID = (i == 0 ? 0 : -(*this)(i - 1, j).s.jointID);
-    p.e.jointID = (j == cols - 1 ? 0 : getRandID());
-    p.s.jointID = (i == rows - 1 ? 0 : getRandID());
-    p.w.jointID = (j == 0 ? 0 : -(*this)(i, j - 1).e.jointID);
-    p.isPlaced = false;
+    (*this)(i, j).n.jointID = (i == 0 ? 0 : -(*this)(i - 1, j).s.jointID);
+    (*this)(i, j).e.jointID = (j == cols - 1 ? 0 : getRandID());
+    (*this)(i, j).s.jointID = (i == rows - 1 ? 0 : getRandID());
+    (*this)(i, j).w.jointID = (j == 0 ? 0 : -(*this)(i, j - 1).e.jointID);
+    (*this)(i, j).isPlaced = false;
 }
 
 const int Puzzle::getRandID() {
