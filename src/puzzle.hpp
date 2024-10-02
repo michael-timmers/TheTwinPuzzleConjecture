@@ -15,7 +15,7 @@ class Puzzle {
     int duplicationsAllowed;
     std::vector<Piece> pieces;
 
-    Puzzle(size_t cols, size_t rows, int duplicationsAllowed, bool generatePieces = true);
+    Puzzle(size_t rows, size_t cols, int duplicationsAllowed, bool generatePieces = true);
 
     // Puzzle(const Puzzle& other) : rows(other.rows), cols(other.cols), duplicationsAllowed(other.duplicationsAllowed), pieces(other.pieces) {}
 
@@ -31,21 +31,19 @@ class Puzzle {
         return pieces[row * cols + col];
     }
 
-    bool operator==(const Puzzle& other) const {
-        for (auto p1 = pieces.begin(), p2 = other.pieces.begin(); p1 < pieces.end(); ++p1, ++p2) {
-            if (!(*p1).matches(*p2))
-                return false;
-        }
-        return true;
-    }
+    bool matches(const Puzzle& other) const;
+    bool matchesWithRotation(const Puzzle& other, int rot) const;
+    bool matchesAnyRotation(const Puzzle& other) const;
 
-    bool fits(const Piece& p, size_t row, size_t col);
+    bool fits(const Piece& p, size_t row, size_t col) const;
     void place(const Piece& p, size_t row, size_t col);
 
     void display();
 
    private:
     void generateNextPiece(int i, int j);
-
     const int getRandID();
+
+    int rotateRow(int row, int col, int rot) const;
+    int rotateCol(int row, int col, int rot) const;
 };

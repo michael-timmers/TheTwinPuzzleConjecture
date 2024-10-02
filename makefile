@@ -1,7 +1,7 @@
 COMPILER=clang++
 CPPFLAGS= -g -std=c++20
 LDFLAGS= -v
-DEBUG = lldb -o run
+DEBUG = lldb
 
 APP_NAME=PuzzleConjecture
 EXECUTABLE=bin/$(APP_NAME)
