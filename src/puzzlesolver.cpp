@@ -34,9 +34,6 @@ void PuzzleSolver::placePieces(Puzzle& board, std::vector<Piece>& unplaced) {
             for (size_t j = 0; j < board.cols; j++) {
                 // std::cout << "Looking at (" << i << ", " << j << "\n";
 
-                if (board(i, j).isPlaced)
-                    continue;
-
                 Puzzle newBoard(board);
                 if (tryPlacingPiece(newBoard, i, j, p)) {
                     std::vector<Piece> newUnplaced(unplaced);
